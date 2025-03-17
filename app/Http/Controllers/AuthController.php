@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
+
+
+use Illuminate\Support\Facades\Auth;
+
+
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
+
+
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -34,6 +44,20 @@ class AuthController extends Controller
     Log::info('Password validation failed for user: ' . $request->login);
     return response()->json(['message' => 'Identifiants invalides'], 401);
 }
-
+     public function checkToken()
+        {
+            try {
+                $user = JWTAuth::parseToken()->authenticate();
+                return response()->json([
+                    'message' => 'Token valide',
+                    'user' => [
+                        'id' => $user->id,
+                        'login' => $user->login,
+                    ]
+                ]);
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'Token invalide'], 401);
+            }
+        }
 
 }

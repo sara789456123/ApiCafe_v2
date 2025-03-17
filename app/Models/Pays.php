@@ -23,8 +23,8 @@ class Pays extends Model
         return $this->hasMany(Dosette::class, "id_pays", "id");
     }
 
-    public static function existePays($pays)
+    public static function existePays($id)
     {
-        return self::where("nom", $pays)->exists();
+        return self::where('id', $id)->exists();
     }
 }

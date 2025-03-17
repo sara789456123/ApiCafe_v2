@@ -17,8 +17,8 @@ class Marque extends Model
         return $this->hasMany(Dosette::class, "id_marque", "id");
     }
 
-    public static function existeMarque($marque)
+     public static function existeMarque($id)
     {
-        return self::where("nom", $marque)->exists();
+        return self::where('id', $id)->exists();
     }
 }

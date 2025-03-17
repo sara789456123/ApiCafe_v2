@@ -1,75 +1,65 @@
-#------------------------------------------------------------
-#        Script MySQL.
-#------------------------------------------------------------
-
 DROP DATABASE IF EXISTS apicafe;
-CREATE DATABASE IF NOT EXISTS apicafe;
+CREATE DATABASE IF NOT EXISTS apicafe CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE apicafe;
-
 
 #------------------------------------------------------------
 # Table: marque
 #------------------------------------------------------------
 
 CREATE TABLE marque(
-        id  Int  Auto_increment  NOT NULL ,
-        nom Varchar (100) NOT NULL
-	,CONSTRAINT marque_PK PRIMARY KEY (id)
-)ENGINE=InnoDB;
-
+    id Int Auto_increment NOT NULL,
+    nom Varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    CONSTRAINT marque_PK PRIMARY KEY (id)
+) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: continent
 #------------------------------------------------------------
 
 CREATE TABLE continent(
-        id  Int  Auto_increment  NOT NULL ,
-        nom Varchar (50) NOT NULL
-	,CONSTRAINT continent_PK PRIMARY KEY (id)
-)ENGINE=InnoDB;
-
+    id Int Auto_increment NOT NULL,
+    nom Varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    CONSTRAINT continent_PK PRIMARY KEY (id)
+) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: pays
 #------------------------------------------------------------
 
 CREATE TABLE pays(
-        id           Int  Auto_increment  NOT NULL ,
-        nom          Varchar (200) NOT NULL ,
-        id_continent Int NOT NULL
-	,CONSTRAINT pays_PK PRIMARY KEY (id)
-
-	,CONSTRAINT pays_continent_FK FOREIGN KEY (id_continent) REFERENCES continent(id)
-)ENGINE=InnoDB;
-
+    id Int Auto_increment NOT NULL,
+    nom Varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    id_continent Int NOT NULL,
+    CONSTRAINT pays_PK PRIMARY KEY (id),
+    CONSTRAINT pays_continent_FK FOREIGN KEY (id_continent) REFERENCES continent(id)
+) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Table: utilisateur
 #------------------------------------------------------------
+
 CREATE TABLE utilisateur (
-    login VARCHAR (150) NOT NULL PRIMARY KEY,
-    mdp VARCHAR(150) NOT NULL,
-    token VARCHAR(300) NULL,
-    admin boolean NULL DEFAULT NULL
-    )
+    login VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL PRIMARY KEY,
+    mdp VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    token VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+    admin BOOLEAN NULL DEFAULT NULL
+);
 
 #------------------------------------------------------------
 # Table: dosette
 #------------------------------------------------------------
 
-
 CREATE TABLE dosette(
-        id        Int  Auto_increment  NOT NULL ,
-        nom       Varchar (100) NOT NULL ,
-        intensite Int NOT NULL ,
-        prix      Decimal (4,2) NOT NULL ,
-        id_marque Int NOT NULL ,
-        id_pays   Int NOT NULL
-	,CONSTRAINT dosette_PK PRIMARY KEY (id)
-
-	,CONSTRAINT dosette_marque_FK FOREIGN KEY (id_marque) REFERENCES marque(id)
-	,CONSTRAINT dosette_pays0_FK FOREIGN KEY (id_pays) REFERENCES pays(id)
-)ENGINE=InnoDB;
+    id Int Auto_increment NOT NULL,
+    nom Varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    intensite Int NOT NULL,
+    prix Decimal(4,2) NOT NULL,
+    id_marque Int NOT NULL,
+    id_pays Int NOT NULL,
+    CONSTRAINT dosette_PK PRIMARY KEY (id),
+    CONSTRAINT dosette_marque_FK FOREIGN KEY (id_marque) REFERENCES marque(id),
+    CONSTRAINT dosette_pays0_FK FOREIGN KEY (id_pays) REFERENCES pays(id)
+) ENGINE=InnoDB;
 
 #------------------------------------------------------------
 # Insertion des données dans la table continent
