@@ -11,25 +11,43 @@ class Auth extends Model
     use HasFactory;
 
     protected $table = 'utilisateur';
-    protected $primaryKey = 'login';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $keyType = 'int';
     protected $hidden = ['mdp'];
+    public $timestamps = false;
+
+    protected $fillable = [
+        'login',
+        'mdp',
+        'token',
+        'admin',
+        'ville',
+        'rue',
+        'cp',
+        'pays',
+    ];
 
     public function setMdpAttribute($value)
     {
-        // Hash the password using Bcrypt
         $this->attributes['mdp'] = Hash::make($value);
+    }
+
+    public function commandes()
+    {
+        return $this->hasMany(\App\Models\Commande::class, 'id_utilisateur', 'id');
     }
 
     public function validatePassword($password)
     {
-        // Verify the provided password against the hashed password
         return Hash::check($password, $this->mdp);
     }
 
     public function generateToken()
     {
-        return bin2hex(random_bytes(16));
+        $token = bin2hex(random_bytes(8));
+        $this->token = $token;
+        $this->save();
+        return $token;
     }
 }

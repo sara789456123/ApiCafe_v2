@@ -1,4 +1,5 @@
 protected $routeMiddleware = [
     // ...
-    'auth.token' => \App\Http\Middleware\CheckToken::class,
+    'auth.token' =>\App\Http\Middleware\Cors::class,
+
 ];

@@ -29,6 +29,31 @@ class PouetController extends Controller
         return response()->json($dosettes);
     }
 
+  public function sortDosettesByName(Request $request)
+  {
+      $order = $request->get('order', 'asc'); // Valeur par défaut : asc
+  
+      if (!in_array(strtolower($order), ['asc', 'desc'])) {
+          return response()->json(['error' => 'Le paramètre "order" doit être "asc" ou "desc".'], 400);
+      }
+
+    $dosettes = Dosettes::with('marque:id,nom', 'pays:id,nom')
+        ->orderBy('nom', $order)
+        ->get()
+        ->map(function ($dosette) {
+            return [
+                'id' => $dosette->id,
+                'nom' => $dosette->nom,
+                'intensite' => $dosette->intensite,
+                'prix' => $dosette->prix,
+                'marque' => $dosette->marque->nom,
+                'pays' => $dosette->pays->nom,
+            ];
+        });
+
+    return response()->json($dosettes);
+}
+
     public function store(Request $request)
     {
       
@@ -46,38 +71,44 @@ class PouetController extends Controller
      
         return response()->json($dosette, 201);
     }
-public function update(Request $request, $id)
-{
+    
+  public function update(Request $request, $id)
+  {
+    
+      $dosette = Dosettes::findOrFail($id);
   
-    $dosette = Dosettes::findOrFail($id);
-
+      //return var_dump($dosette);
+    
+     /*
+      $request->validate([
+          'nom' => 'required|string',
+          'intensite' => 'required|integer',
+          'prix' => 'required|numeric',
+          'id_marque' => 'required|exists:marque,id',
+          'id_pays' => 'required|exists:pays,id',
+      ]);
+      */
   
-    $request->validate([
-        'nom' => 'required|string|max:100',
-        'intensite' => 'required|integer',
-        'prix' => 'required|numeric',
-        'id_marque' => 'required|exists:marque,id',
-        'id_pays' => 'required|exists:pays,id',
-    ]);
-
-
-    $dosette->update($request->all());
-
-   
-    $dosette->load('marque:id,nom', 'pays:id,nom');
-
-   
-    $dosetteData = [
-        'id' => $dosette->id,
-        'nom' => $dosette->nom,
-        'intensite' => $dosette->intensite,
-        'prix' => $dosette->prix,
-        'marque' => $dosette->marque->nom,
-        'pays' => $dosette->pays->nom,
-    ];
-
-    return response()->json($dosetteData);
-}
+  
+      $dosette->update($request->all());
+  
+     
+      $dosette->load('marque:id,nom', 'pays:id,nom');
+  
+     
+      $dosetteData = [
+          'id' => $dosette->id,
+          'nom' => $dosette->nom,
+          'intensite' => $dosette->intensite,
+          'prix' => $dosette->prix,
+          'marque' => $dosette->marque->nom,
+          'pays' => $dosette->pays->nom,
+      ];
+      
+      //return "coucou";
+    //return vardump($dosetteData);
+     return response()->json($dosetteData);
+  }
 
 
     public function destroy($id)

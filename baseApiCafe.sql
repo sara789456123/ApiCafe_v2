@@ -101,7 +101,7 @@ INSERT INTO marque (nom) VALUES
 ('Jacobs'),
 ('Carte Noire'),
 ('Segafredo'),
-('Café Royal'),
+('Cafe Royal'),
 ('Melitta'),
 ('Senseo');
 

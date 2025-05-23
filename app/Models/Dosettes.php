@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Dosettes extends Model
 {  
     use HasFactory;
-  
-    public $timestamps = false;
      
     protected $table = 'dosette';
-
+    public $timestamps = false;
+  
     protected $fillable = [
         'nom',
         'intensite',
